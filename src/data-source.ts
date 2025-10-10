@@ -1,15 +1,19 @@
 import "reflect-metadata"
 import { DataSource } from "typeorm"
 import { User } from "./entity/User"
+import * as dotenv from "dotenv";
+
+dotenv.config()
+const { DB_HOST , DB_PORT , DB_USER, DB_PASSWORD, DB_DATABASE} = process.env;
 
 export const AppDataSource = new DataSource({
     type: "postgres",
-    host: "localhost",
+    host: DB_HOST || "localhost",
     port: 5432,
-    username: "test",
-    password: "test",
-    database: "test",
-    synchronize: true,
+    username: DB_USER || "test",
+    password: DB_PASSWORD || "test",
+    database: DB_DATABASE || "test",
+    synchronize: false,
     logging: false,
     entities: [User],
     migrations: [],
