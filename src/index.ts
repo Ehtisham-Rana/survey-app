@@ -2,7 +2,7 @@ import "reflect-metadata";
 import * as express from "express";
 import * as dotenv from "dotenv";
 import { AppDataSource } from "./data-source";
-import { userRouter } from "./routes/user.route";
+import { userRouter, authRouter } from "./routes/index";
 
 //Configuration
 dotenv.config();
@@ -14,7 +14,8 @@ const PORT = process.env.PORT || 3000;
 app.use(express.json())
 
 //Routes
-app.use("/api", userRouter)
+app.use("/api", userRouter);
+app.use("/api", authRouter);
 
 //Server and DB initializing
 AppDataSource.initialize()

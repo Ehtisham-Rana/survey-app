@@ -3,11 +3,7 @@ import { userRepository } from "../repository";
 
 
 export class Usercontroller {
-    //Register User Controller
-    static async registerUser(req: Request, res:Response) {
-        const user = await userRepository.createUser(req.body);
-        res.status(201).json(user);
-    }
+    
     //Get All User Controller
     static async findAll(req: Request, res:Response) {
         const user = await userRepository.findAll();
