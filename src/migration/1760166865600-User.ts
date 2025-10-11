@@ -1,9 +1,12 @@
 import { MigrationInterface, QueryRunner } from "typeorm";
 
-export class User1760118654918 implements MigrationInterface {
-    name = 'User1760118654918'
+export class User1760166865600 implements MigrationInterface {
+    name = 'User1760166865600'
 
     public async up(queryRunner: QueryRunner): Promise<void> {
+        await queryRunner.query(`
+            CREATE TYPE "public"."user_role_enum" AS ENUM('admin', 'user', 'guest')
+        `);
         await queryRunner.query(`
             CREATE TABLE "user" (
                 "id" SERIAL NOT NULL,
@@ -11,7 +14,7 @@ export class User1760118654918 implements MigrationInterface {
                 "lastName" character varying NOT NULL,
                 "email" character varying NOT NULL,
                 "password" character varying NOT NULL,
-                "role" character varying NOT NULL,
+                "role" "public"."user_role_enum" NOT NULL DEFAULT 'guest',
                 "isVerified" boolean NOT NULL DEFAULT false,
                 "createdAt" TIMESTAMP NOT NULL DEFAULT now(),
                 "updatedAt" TIMESTAMP NOT NULL DEFAULT now(),
@@ -23,6 +26,9 @@ export class User1760118654918 implements MigrationInterface {
     public async down(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.query(`
             DROP TABLE "user"
+        `);
+        await queryRunner.query(`
+            DROP TYPE "public"."user_role_enum"
         `);
     }
 
