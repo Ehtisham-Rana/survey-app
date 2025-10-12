@@ -2,26 +2,22 @@ import "reflect-metadata";
 import * as express from "express";
 import * as dotenv from "dotenv";
 import { AppDataSource } from "./data-source";
-import passwordRoutes from "./routes/password.route";
-import { userRouter, authRouter } from "./routes/index";
+import { userRouter, authRouter, passwordRouter } from "./routes/index";
 
 
 //Configuration
 dotenv.config();
 const app = express();
-app.use(express.json());
+
 const PORT = process.env.PORT || 3000;
 
-app.use("/api/v1/auth", authRouter);
-app.use("/api/v1/auth", passwordRoutes);
 //Middleware
 app.use(express.json())
 
 //Routes
 app.use("/api", userRouter);
 app.use("/api", authRouter);
-
-// sendEmail("engr.rana@mail.com")
+app.use("/api/v1/auth", passwordRouter);
 
 //Server and DB initializing
 AppDataSource.initialize()

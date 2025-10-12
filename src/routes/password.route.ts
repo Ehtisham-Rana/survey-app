@@ -7,4 +7,4 @@ const router = Router();
 router.post("/forgot-password", PasswordController.forgotPassword);
 router.post("/reset-password", PasswordController.resetPassword);
 
-export default router;
+export {router as passwordRouter};

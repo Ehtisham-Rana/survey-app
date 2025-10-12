@@ -1,15 +1,13 @@
-// src/services/auth.service.ts
-import { AppDataSource } from "../config/data-source";
-import { User } from "../entity/User";
+
+import { UserResDto } from "../dto/reponse/user.dto";
+import { userRepository } from "../repository";
 import * as bcrypt from "bcrypt";
 import * as jwt from "jsonwebtoken";
 
-
 export class AuthService {
   static async login(email: string, password: string) {
-    const userRepo = AppDataSource.getRepository(User);
 
-    const user = await userRepo.findOne({ where: { email } });
+    const user = await userRepository.findByEmail(email);
     if (!user) throw { status: 401, message: "Invalid email or password" };
 
     const valid = await bcrypt.compare(password, user.password);
@@ -24,10 +22,10 @@ export class AuthService {
       { expiresIn: "1h" }
     );
 
-
     return {
       accessToken,
-      user: { id: user.id, email: user.email },
+       user: new UserResDto(user),
     };
   }
+
 }
