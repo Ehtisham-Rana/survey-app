@@ -1,7 +1,7 @@
 // src/services/password.service.ts
 import { AppDataSource } from "../config/data-source";
 import { User } from "../entity/User";
-import * as bcrypt from "bcryptjs";
+import * as bcrypt from "bcrypt";
 import * as crypto from "crypto";
 import * as nodemailer from "nodemailer";
 import * as dotenv from "dotenv";
@@ -57,7 +57,7 @@ export class PasswordService {
 
     // Hash new password
     const hash = await bcrypt.hash(newPassword, 10);
-    user.passwordHash = hash;
+    user.password = hash;
     user.resetToken = null;
     user.resetTokenExpiry = null;
     await repo.save(user);

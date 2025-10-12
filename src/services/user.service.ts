@@ -2,7 +2,7 @@ import { Repository } from "typeorm";
 import { User } from "../entity/User";
 import Encrypt from "../utils/encrypt.helper";
 import sendEmail from "../utils/mail.util";
-import { UserResDto } from "../dto/reponse/user.dto";
+
 
 
 export class Userservice{
@@ -60,7 +60,7 @@ export class Userservice{
 
     //Verifying otp  
     async verifyOtp (email: string , otp: number): Promise <User >{
-        const user = await this.userRepository.findOneBy({email})
+        const user = await this.userRepository.findOneBy({email});
         const validity = new Date(Date.now()) < user.optValidity;
 
         if (!user){ throw new Error("User do not exists") };
@@ -73,6 +73,22 @@ export class Userservice{
         }
             
         await this.userRepository.save(user);
+        return user;
+    }
+    //Resend OTP
+    async resendOtp(email: string) {
+        const user = await this.userRepository.findOneBy({email});
+        
+        const otpCode = Userservice.generateOtp();
+        const otpExpiry = Userservice.otpValidity();
+        if (!user){ 
+            throw new Error("User do not exists") 
+        } else {
+            user.otpCode = otpCode;
+            user.optValidity = otpExpiry;
+        }
+        await this.userRepository.save(user);
+        await sendEmail(user.email , otpCode);
         return user;
     }
 

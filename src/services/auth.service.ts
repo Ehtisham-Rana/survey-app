@@ -24,6 +24,7 @@ export class AuthService {
       { expiresIn: "1h" }
     );
 
+
     return {
       accessToken,
       user: { id: user.id, email: user.email },

@@ -19,7 +19,7 @@ const sendEmail = async (email: string, otpCode: number) => {
         from: SENDER_EMAIL,
         to: email,
         subject: "Opt Verification",
-        html: `You account verification code is <em> ${otpCode} </em>.`,
+        html: `You account verification code is <bold> ${otpCode} </bold>.`,
     };
     await transporter.sendMail(message);
 

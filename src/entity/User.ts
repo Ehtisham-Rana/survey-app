@@ -1,12 +1,12 @@
 import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn } from "typeorm"
 import { userRoles } from "../enum/userRole.enum"
 
-@Entity("users")
+@Entity("user")
 export class User {
     @PrimaryGeneratedColumn()
     id: number;
 
-    @Column({ unique: true })
+    @Column()
     email: string;
 
     @Column()
