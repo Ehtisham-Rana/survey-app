@@ -4,7 +4,10 @@ import * as dotenv from "dotenv";
 import { AppDataSource } from "./data-source";
 import authRoutes from "./routes/auth.routes";
 import passwordRoutes from "./routes/password.routes";
+import { userRouter, authRouter } from "./routes/index";
 
+
+//Configuration
 dotenv.config();
 const app = express();
 app.use(express.json());
@@ -12,6 +15,16 @@ const PORT = process.env.PORT || 3000;
 
 app.use("/api/v1/auth", authRoutes);
 app.use("/api/v1/auth", passwordRoutes);
+//Middleware
+app.use(express.json())
+
+//Routes
+app.use("/api", userRouter);
+app.use("/api", authRouter);
+
+// sendEmail("engr.rana@mail.com")
+
+//Server and DB initializing
 AppDataSource.initialize()
   .then(async () => {
     app.listen(PORT, () => {
