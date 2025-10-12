@@ -1,7 +1,7 @@
 // src/services/auth.service.ts
 import { AppDataSource } from "../config/data-source";
 import { User } from "../entity/User";
-import * as bcrypt from "bcryptjs";
+import * as bcrypt from "bcrypt";
 import * as jwt from "jsonwebtoken";
 
 
@@ -12,7 +12,7 @@ export class AuthService {
     const user = await userRepo.findOne({ where: { email } });
     if (!user) throw { status: 401, message: "Invalid email or password" };
 
-    const valid = await bcrypt.compare(password, user.passwordHash);
+    const valid = await bcrypt.compare(password, user.password);
     if (!valid) throw { status: 401, message: "Invalid email or password" };
 
     if (!user.isVerified)

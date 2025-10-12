@@ -3,22 +3,11 @@ import { userRoles } from "../enum/userRole.enum"
 
 @Entity("users")
 export class User {
-  @PrimaryGeneratedColumn("uuid")
-  id: string;
+    @PrimaryGeneratedColumn()
+    id: number;
 
-  @Column({ unique: true })
-  email: string;
-
-  @Column()
-  passwordHash: string;
-
-  @Column({ default: false })
-  isVerified: boolean;
-
-  @Column({ nullable: true })
-  resetToken: string | null;
-    @Column()
-    email: string
+    @Column({ unique: true })
+    email: string;
 
     @Column()
     password: string
@@ -35,18 +24,15 @@ export class User {
     @Column({nullable: true})
     optValidity: Date
 
+    @Column({ nullable: true })
+    resetToken: string | null;
+
+    @Column({ nullable: true, type: "timestamp" })
+    resetTokenExpiry: Date | null;
+
     @CreateDateColumn()
-    createdAt: Date
+    createdAt: Date;
 
     @UpdateDateColumn()
-    updatedAt: Date
-
-  @Column({ nullable: true, type: "timestamp" })
-  resetTokenExpiry: Date | null;
-
-  @CreateDateColumn()
-  createdAt: Date;
-
-  @UpdateDateColumn()
-  updatedAt: Date;
+    updatedAt: Date;
 }
