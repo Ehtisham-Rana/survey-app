@@ -25,10 +25,10 @@ export class User {
     @Column({default: false})
     isVerified: boolean
 
-    @Column()
+    @Column({nullable: true})
     otpCode: number
     
-    @Column()
+    @Column({nullable: true})
     optValidity: Date
 
     @CreateDateColumn()

@@ -3,7 +3,7 @@ import * as express from "express";
 import * as dotenv from "dotenv";
 import { AppDataSource } from "./data-source";
 import { userRouter, authRouter } from "./routes/index";
-import sendEmail from "./utils/mail.util";
+
 
 //Configuration
 dotenv.config();
