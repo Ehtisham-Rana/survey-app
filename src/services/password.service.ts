@@ -3,8 +3,8 @@ import { AppDataSource } from "../config/data-source";
 import { User } from "../entity/User";
 import * as bcrypt from "bcrypt";
 import * as crypto from "crypto";
-import * as nodemailer from "nodemailer";
 import * as dotenv from "dotenv";
+import { sendEmailLink } from "../utils/mail.util";
 
 dotenv.config();
 
@@ -22,28 +22,9 @@ export class PasswordService {
 
     // Create reset link
     const resetLink = `${process.env.FRONTEND_URL}/reset-password?token=${token}`;
-
-    // Configure email transport
-    const transporter = nodemailer.createTransport({
-      service: "gmail",
-      auth: {
-        user: process.env.SMTP_EMAIL,
-        pass: process.env.SMTP_PASS,
-      },
-    });
-
-    // Send reset email
-    await transporter.sendMail({
-      from: `"Survey App" <${process.env.SMTP_EMAIL}>`,
-      to: email,
-      subject: "Password Reset Request",
-      html: `
-        <p>We received a request to reset your password.</p>
-        <p>Click <a href="${resetLink}">here</a> to reset your password.</p>
-        <p>This link will expire in 15 minutes.</p>
-      `,
-    });
-
+    
+    await sendEmailLink(user.email, resetLink);
+    
     return { message: "Password reset email sent successfully." };
   }
 

@@ -1,7 +1,7 @@
 import { Repository } from "typeorm";
 import { User } from "../entity/User";
 import Encrypt from "../utils/encrypt.helper";
-import sendEmail from "../utils/mail.util";
+import {sendEmailOtp} from "../utils/mail.util";
 
 
 
@@ -24,7 +24,7 @@ export class Userservice{
               
         const newUser = this.userRepository.create(payload);
         await this.userRepository.save(newUser);
-        await sendEmail(user.email , otpCode);
+        await sendEmailOtp(user.email , otpCode);
         return newUser;
     }
     //Get All Users service
@@ -88,7 +88,7 @@ export class Userservice{
             user.optValidity = otpExpiry;
         }
         await this.userRepository.save(user);
-        await sendEmail(user.email , otpCode);
+        await sendEmailOtp(user.email , otpCode);
         return user;
     }
 
