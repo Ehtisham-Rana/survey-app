@@ -1,18 +1,22 @@
 import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn } from "typeorm"
 import { userRoles } from "../enum/userRole.enum"
 
-@Entity()
+@Entity("users")
 export class User {
+  @PrimaryGeneratedColumn("uuid")
+  id: string;
 
-    @PrimaryGeneratedColumn()
-    id: number
+  @Column({ unique: true })
+  email: string;
 
-    @Column()
-    firstName: string
+  @Column()
+  passwordHash: string;
 
-    @Column()
-    lastName: string
+  @Column({ default: false })
+  isVerified: boolean;
 
+  @Column({ nullable: true })
+  resetToken: string | null;
     @Column()
     email: string
 
@@ -37,4 +41,12 @@ export class User {
     @UpdateDateColumn()
     updatedAt: Date
 
+  @Column({ nullable: true, type: "timestamp" })
+  resetTokenExpiry: Date | null;
+
+  @CreateDateColumn()
+  createdAt: Date;
+
+  @UpdateDateColumn()
+  updatedAt: Date;
 }
