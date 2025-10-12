@@ -3,6 +3,7 @@ import * as express from "express";
 import * as dotenv from "dotenv";
 import { AppDataSource } from "./data-source";
 import { userRouter, authRouter } from "./routes/index";
+import sendEmail from "./utils/mail.util";
 
 //Configuration
 dotenv.config();
@@ -16,6 +17,8 @@ app.use(express.json())
 //Routes
 app.use("/api", userRouter);
 app.use("/api", authRouter);
+
+// sendEmail("engr.rana@mail.com")
 
 //Server and DB initializing
 AppDataSource.initialize()

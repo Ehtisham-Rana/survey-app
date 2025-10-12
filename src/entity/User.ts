@@ -25,6 +25,12 @@ export class User {
     @Column({default: false})
     isVerified: boolean
 
+    @Column()
+    otpCode: number
+    
+    @Column()
+    optValidity: Date
+
     @CreateDateColumn()
     createdAt: Date
 

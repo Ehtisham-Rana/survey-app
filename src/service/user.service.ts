@@ -1,14 +1,20 @@
 import { Repository } from "typeorm";
 import { User } from "../entity/User";
+import Encrypt from "../utils/encrypt.helper";
 
 
 export class Userservice{
     constructor(private userRepository: Repository<User>){}
    
     //Create User Service
-    async createUser(user : User) : Promise <User>{
-              
-        const newUser = this.userRepository.create(user);
+    async createUser(user : User , otpCode: number, optExpiry:Date) : Promise <User>{
+        const payload = {
+            ...user,
+            password: await Encrypt.hashPassword(user.password),
+            otpCode: otpCode,
+            optValidity: optExpiry
+        };      
+        const newUser = this.userRepository.create(payload);
         await this.userRepository.save(newUser);
         return newUser;
     }
