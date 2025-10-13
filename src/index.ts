@@ -1,7 +1,7 @@
 import "reflect-metadata";
-import * as express from "express";
+import express from "express";
 import * as dotenv from "dotenv";
-import { AppDataSource } from "./data-source";
+import { AppDataSource } from "./config/data-source";
 import { userRouter, authRouter, passwordRouter } from "./routes/index";
 
 
@@ -15,9 +15,17 @@ const PORT = process.env.PORT || 3000;
 app.use(express.json())
 
 //Routes
+app.get("/", (req, res) => {
+  res.send(" Server is running successfully!");
+});
+
 app.use("/api", userRouter);
 app.use("/api", authRouter);
 app.use("/api/v1/auth", passwordRouter);
+
+
+console.log("Initializing database connection...");
+console.log("DB_USER:", process.env.DB_USER);
 
 //Server and DB initializing
 AppDataSource.initialize()
