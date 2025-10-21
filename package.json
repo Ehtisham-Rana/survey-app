@@ -28,7 +28,7 @@
    },
    "scripts": {
       "typeorm": "typeorm-ts-node-commonjs",
-        "dev": "ts-node src/index.ts",
+      "dev": "nodemon",
       "build": "tsc",
       "start": "node build/index.js",
       "migration": "npm run typeorm migration:run -- -d ./src/data-source.ts",

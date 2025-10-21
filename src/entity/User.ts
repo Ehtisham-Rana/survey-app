@@ -1,5 +1,6 @@
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn } from "typeorm"
+import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, BeforeInsert } from "typeorm"
 import { userRoles } from "../enum/userRole.enum"
+import Encrypt from "../utils/encrypt.helper";
 
 @Entity("user")
 export class User {
@@ -35,4 +36,23 @@ export class User {
 
     @UpdateDateColumn()
     updatedAt: Date;
+
+  @BeforeInsert()
+  async hashPassword() {
+    this.password = await Encrypt.hashPassword(this.password);
+  }
+
+  @BeforeInsert()
+  addOtpCodeAndValidTillDate() {
+    this.otpCode = this.generateOtp();
+    this.optValidity = this.otpValidity();
+  }
+
+public generateOtp(){
+    return Math.floor((Math.random()*9000) + 1000);
+    
+}
+public otpValidity(){
+    return  new Date(Date.now() + 5*60*1000);
+}
 }

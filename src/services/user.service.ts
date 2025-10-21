@@ -1,7 +1,6 @@
 import { Repository } from "typeorm";
 import { User } from "../entity/User";
-import Encrypt from "../utils/encrypt.helper";
-import {sendEmailOtp} from "../utils/mail.util";
+import Mailer from "../utils/mail.util";
 
 
 
@@ -12,19 +11,13 @@ export class Userservice{
     //Create User Service
     async createUser(user : User) : Promise <User>{
 
-        const otpCode = Userservice.generateOtp();
-        const otpExpiry = Userservice.otpValidity();
-       
         const payload = {
             ...user,
-            password: await Encrypt.hashPassword(user.password),
-            otpCode: otpCode,
-            optValidity: otpExpiry
         };
               
         const newUser = this.userRepository.create(payload);
         await this.userRepository.save(newUser);
-        await sendEmailOtp(user.email , otpCode);
+        await Mailer.sendEmailOtp(user.email , user.otpCode);
         return newUser;
     }
     //Get All Users service
@@ -58,46 +51,4 @@ export class Userservice{
         return result.affected !==0;
     }
 
-    //Verifying otp  
-    async verifyOtp (email: string , otp: number): Promise <User >{
-        const user = await this.userRepository.findOneBy({email});
-        const validity = new Date(Date.now()) < user.optValidity;
-
-        if (!user){ throw new Error("User do not exists") };
-        if ( otp === user.otpCode && validity === true) {
-            user.isVerified = true;
-            user.otpCode = null;
-            user.optValidity = null;
-        } else {
-            throw new Error("Invalid or expired OTP");
-        }
-            
-        await this.userRepository.save(user);
-        return user;
-    }
-    //Resend OTP
-    async resendOtp(email: string) {
-        const user = await this.userRepository.findOneBy({email});
-        
-        const otpCode = Userservice.generateOtp();
-        const otpExpiry = Userservice.otpValidity();
-        if (!user){ 
-            throw new Error("User do not exists") 
-        } else {
-            user.otpCode = otpCode;
-            user.optValidity = otpExpiry;
-        }
-        await this.userRepository.save(user);
-        await sendEmailOtp(user.email , otpCode);
-        return user;
-    }
-
-    private static generateOtp(){
-        const otpCode = Math.floor((Math.random()*9000) + 1000);
-        return otpCode;
-    }
-    private static otpValidity(){
-        const otpExpiry = new Date(Date.now() + 5*60*1000);
-        return otpExpiry;
-    }
 }      

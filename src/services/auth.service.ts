@@ -1,8 +1,8 @@
 
 import { UserResDto } from "../dto/reponse/user.dto";
 import { userRepository } from "../repository";
-import * as bcrypt from "bcrypt";
-import * as jwt from "jsonwebtoken";
+import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
 
 export class AuthService {
   static async login(email: string, password: string) {
