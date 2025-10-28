@@ -1,6 +1,7 @@
 import "reflect-metadata";
 import express from "express";
 import * as dotenv from "dotenv";
+import cors from "cors";
 import { AppDataSource } from "./data-source";
 import { userRouter, authRouter, passwordRouter } from "./routes/index";
 
@@ -9,6 +10,11 @@ import { userRouter, authRouter, passwordRouter } from "./routes/index";
 dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 3000;
+
+app.use(cors(
+  { origin: 'http://localhost:5173',
+  optionsSuccessStatus: 204 }
+))
 
 //Middleware
 app.use(express.json())

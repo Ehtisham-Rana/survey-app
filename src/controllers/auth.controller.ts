@@ -64,7 +64,7 @@ export class AuthController {
     }
     await userRepository.updateUser(user.id, user);
     await Mailer.sendEmailOtp(user.email , otpCode);
-    return user;
+    return res.status(200).json({ message: "OTP code sent successfully"});;
   }
     
 }

@@ -7,7 +7,7 @@ const router = express.Router();
 
 router.post("/login", loginValidator, AuthController.login);
 router.post("/register", userValidator, AuthController.registerUser)
-router.post("/verify", AuthController.verifyOtp)
-router.post("/resend", AuthController.resendOtp)
+router.post("/verify-otp", AuthController.verifyOtp)
+router.post("/resend-otp", AuthController.resendOtp)
 
 export {router as authRouter}

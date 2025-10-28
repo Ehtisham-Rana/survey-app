@@ -5,6 +5,7 @@ import Mailer from "../utils/mail.util";
 import * as crypto from "crypto";
 import * as dotenv from "dotenv";
 import Encrypt from "../utils/encrypt.helper";
+import { UserResDto } from "../dto/reponse/user.dto";
 
 dotenv.config();
 
@@ -25,8 +26,10 @@ export class PasswordController {
       const resetLink = `${process.env.FRONTEND_URL}/reset-password?token=${token}`;
       
       await Mailer.sendEmailLink(user.email, resetLink);
-      return res.status(200).json({ message: "Password reset email sent successfully." });
-    
+      return res.status(200).json({ 
+        user: new UserResDto(user), 
+        message: "Password reset email sent successfully." 
+      });
     
     } catch (err: any) {
       return res.status(err.status || 500).json({ message: err.message });
