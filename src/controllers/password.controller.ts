@@ -7,6 +7,7 @@ import * as dotenv from "dotenv";
 import Encrypt from "../utils/encrypt.helper";
 import { UserResDto } from "../dto/reponse/user.dto";
 
+
 dotenv.config();
 
 export class PasswordController {
@@ -23,7 +24,7 @@ export class PasswordController {
       await userRepository.updateUser(user.id, user);
   
       // Create reset link
-      const resetLink = `${process.env.FRONTEND_URL}/reset-password?token=${token}`;
+      const resetLink = `${process.env.FRONTEND_URL}/auth/reset-password?token=${token}`;
       
       await Mailer.sendEmailLink(user.email, resetLink);
       return res.status(200).json({ 
@@ -38,13 +39,13 @@ export class PasswordController {
 
   static async resetPassword(req: Request, res: Response) {
     try {
-      const { email, newPassword } = req.body;
+      const { email, password } = req.body;
       const user = await userRepository.findByEmail(email);
-      const validity = new Date() < user.resetTokenExpiry;
+      const validity = new Date(Date.now()) < user.resetTokenExpiry;
       
-      if(user.resetTokenExpiry && validity === true){
+      if(validity === true){
         //hash new password
-        const hash = await Encrypt.hashPassword(newPassword);
+        const hash = await Encrypt.hashPassword(password);
         user.password = hash;
         user.resetToken = null;
         user.resetTokenExpiry = null;

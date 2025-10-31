@@ -1,16 +1,31 @@
 
 import { Request, Response } from "express";
-import { AuthService } from "../services/auth.service";
 import { userRepository } from "../repository";
 import { UserResDto } from "../dto/reponse/user.dto";
 import Mailer from "../utils/mail.util";
+import Encrypt from "../utils/encrypt.helper";
 
 export class AuthController {
   static async login(req: Request, res: Response) {
     try {
       const { email, password } = req.body;
-      const result = await AuthService.login(email, password);
-      return res.status(200).json(result);
+      const user = await userRepository.findByEmail(email);
+      if (!user) throw { status: 401, message: "Invalid email or password" };
+
+      const valid = await Encrypt.comparePassword(password, user.password);
+      if (!valid) throw { status: 401, message: "Invalid email or password" };
+
+      if (!user.isVerified)
+        throw { status: 403, message: "Please verify your account first" };
+
+      const accessToken = await Encrypt.generateToken({ id: user.id });
+      const refreshToken = await Encrypt.generateRefreshToken({ id: user.id });
+
+      return res.status(200).json({
+        accessToken,
+        refreshToken,
+        user: new UserResDto(user),
+      });
     } catch (err: any) {
       return res.status(err.status || 500).json({ message: err.message || "Login failed" });
     }
@@ -20,7 +35,7 @@ export class AuthController {
   static async registerUser(req: Request, res:Response) {
 
     const user = await userRepository.createUser(req.body); 
-    res.status(201).json({ user: new UserResDto(user)});
+    res.status(201).json( {user:new UserResDto(user)});
   }
   
   //Verify OTP

@@ -12,7 +12,7 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 
 app.use(cors(
-  { origin: 'http://localhost:5173',
+  { origin: process.env.FRONTEND_URL,
   optionsSuccessStatus: 204 }
 ))
 
@@ -22,7 +22,7 @@ app.use(express.json())
 //Routes
 app.use("/api/v1", userRouter);
 app.use("/api/v1", authRouter);
-app.use("/api/v1/auth", passwordRouter);
+app.use("/api/v1", passwordRouter);
 
 
 //Server and DB initializing

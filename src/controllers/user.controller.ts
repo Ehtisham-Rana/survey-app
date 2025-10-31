@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { userRepository } from "../repository";
-import { AuthRequest } from "../middleware/auth.middleware";
+import { AuthRequest } from "../middleware/authentication";
 import { UserResDto } from "../dto/reponse/user.dto";
 
 export class Usercontroller {
@@ -38,6 +38,6 @@ export class Usercontroller {
       return res.status(404).json({ message: "User not found" });
     }
 
-    return res.status(200).json({ user: new UserResDto(user) });
+    return res.status(200).json(new UserResDto(user) );
   }
 }
