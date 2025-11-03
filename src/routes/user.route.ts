@@ -1,10 +1,10 @@
 import express from "express";
 import { Usercontroller } from "../controllers/user.controller";
-import { authenticate } from "../middleware/auth.middleware";
-import { authorize } from "../middleware/role.middleware";
+import { authenticate } from "../middleware/authentication";
+import { authorize } from "../middleware/authorization";
 const router = express.Router();
 
-router.get("/user/", Usercontroller.findAll);
+router.get("/users/", Usercontroller.findAll);
 router.get("/user/:id", Usercontroller.findById);
 router.put("/user/:id", authenticate, Usercontroller.updateUser);
 router.delete("/user/:id", authenticate, Usercontroller.deleteUser);

@@ -1,4 +1,4 @@
-import { loginValidator } from "./login.validator.js";
-import { userValidator } from "./user.validator.js";
+import { loginValidator } from "./login.validator";
+import { userValidator } from "./user.validator";
 
 export { loginValidator, userValidator };

@@ -17,7 +17,7 @@ export class Userservice{
               
         const newUser = this.userRepository.create(payload);
         await this.userRepository.save(newUser);
-        await Mailer.sendEmailOtp(user.email , user.otpCode);
+        await Mailer.sendEmailOtp(newUser.email , newUser.otpCode);
         return newUser;
     }
     //Get All Users service

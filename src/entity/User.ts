@@ -2,10 +2,17 @@ import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateCol
 import { userRoles } from "../enum/userRole.enum"
 import Encrypt from "../utils/encrypt.helper";
 
-@Entity("user")
+@Entity("users")
 export class User {
     @PrimaryGeneratedColumn()
     id: number;
+    
+    @Column()
+    firstName: string
+
+    @Column()
+    lastName: string
+
 
     @Column({unique: true})
     email: string;
@@ -49,7 +56,7 @@ export class User {
   }
 
 public generateOtp(){
-    return Math.floor((Math.random()*9000) + 1000);
+    return Math.floor((Math.random()*900000) + 100000);
     
 }
 public otpValidity(){

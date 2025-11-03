@@ -1,3 +1,4 @@
+import { User } from "../../entity/User";
 
 export class UserResDto{
     id: number;
@@ -7,7 +8,7 @@ export class UserResDto{
     role: string;
     isVerified: boolean;
 
-    constructor (user: any){
+    constructor (user: User){
         this.id = user.id;
         this.firstName = user.firstName;
         this.lastName = user.lastName;

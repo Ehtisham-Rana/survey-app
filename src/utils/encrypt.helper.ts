@@ -1,7 +1,8 @@
-import * as bcrypt from "bcrypt";
+import bcrypt from "bcrypt";
 import * as dotenv from "dotenv";
+import jwt from "jsonwebtoken";
 dotenv.config();
-const { JWT_SECRET = "", SALT_ROUNDS } = process.env;
+const { JWT_SECRET , SALT_ROUNDS } = process.env;
 
 export default class Encrypt {
     static async hashPassword(password: string): Promise<string> {
@@ -12,4 +13,21 @@ export default class Encrypt {
     static async comparePassword(password: string, hashPassword:string): Promise<boolean> {
         return bcrypt.compareSync(password, hashPassword);
     };
+
+    static async generateToken(payload: any): Promise<string> {
+        return jwt.sign(payload, JWT_SECRET, { expiresIn: "1h" });
+    }
+
+    static async generateRefreshToken(payload: any): Promise<string> {
+        return jwt.sign(payload, JWT_SECRET, { expiresIn: "7d" });
+    }
+
+    static verifyToken(token: string): any {
+        try {
+        return jwt.verify(token, JWT_SECRET);
+        } catch (error) {
+        console.error("Token verification failed:", error);
+        return null;
+        }
+    }
 }
