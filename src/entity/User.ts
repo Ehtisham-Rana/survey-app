@@ -1,34 +1,44 @@
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn } from "typeorm"
-import { userRoles } from "../enum/userRole.enum"
+import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, OneToMany } from "typeorm";
+import { userRoles } from "../enum/userRole.enum";
+import { Survey } from "./Survey";
 
-@Entity("user")
+@Entity("users")
 export class User {
     @PrimaryGeneratedColumn()
     id: number;
 
-    @Column({unique: true})
+    @Column({ nullable: true })
+    firstName: string;
+
+    @Column({ nullable: true })
+    lastName: string;
+
+    @Column({ unique: true })
     email: string;
 
     @Column()
-    password: string
+    password: string;
 
-    @Column({type: "enum", enum: userRoles, default: userRoles.GUEST})
-    role: string
+    @Column({ type: "enum", enum: userRoles, default: userRoles.GUEST })
+    role: string;
 
-    @Column({default: false})
-    isVerified: boolean
+    @Column({ default: false })
+    isVerified: boolean;
 
-    @Column({nullable: true})
-    otpCode: number
-    
-    @Column({nullable: true})
-    optValidity: Date
+    @Column({ nullable: true })
+    otpCode: number;
+
+    @Column({ nullable: true })
+    optValidity: Date;
 
     @Column({ nullable: true })
     resetToken: string | null;
 
     @Column({ nullable: true, type: "timestamp" })
     resetTokenExpiry: Date | null;
+
+    @OneToMany(() => Survey, survey => survey.owner)
+    surveys: Survey[];
 
     @CreateDateColumn()
     createdAt: Date;

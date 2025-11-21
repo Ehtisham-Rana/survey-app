@@ -1,5 +1,5 @@
 // src/services/password.service.ts
-import { AppDataSource } from "../config/data-source";
+import { AppDataSource } from "../data-source";
 import { User } from "../entity/User";
 import * as bcrypt from "bcrypt";
 import * as crypto from "crypto";

@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { userRepository } from "../repository";
-import { AppDataSource } from "../config/data-source";
+import { AppDataSource } from "../data-source";
 import { User } from "../entity/User";
 import { AuthRequest } from "../middleware/auth.middleware";
 
